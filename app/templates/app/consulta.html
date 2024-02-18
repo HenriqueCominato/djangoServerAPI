@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de CEP</title>
+    <link rel="stylesheet" href="{% static 'app/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de CEP</h1>
+        <form action="{% url 'consulta' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" pattern="[0-9]{8}" maxlength="8" required>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+            <button type="button" class="btn btn-secondary" onclick="limparDados()">Limpar</button>
+        </form>
+        
+        <!-- Dados fictícios do endereço -->
+        {% if resultado_cep %}
+        <div class="endereco">
+            <h2>Dados do Endereço</h2>
+            <p><strong>CEP:</strong> {{ cep_digitado|slice:'0:5' }}-{{ cep_digitado|slice:'5:9' }}</p>
+            <p><strong>Rua:</strong> {{ resultado_cep.rua }}</p>
+            <p><strong>Bairro:</strong> {{ resultado_cep.bairro }}</p>
+            <p><strong>Cidade:</strong> {{ resultado_cep.cidade }}</p>
+            <p><strong>Estado:</strong> {{ resultado_cep.estado }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function limparDados() {
+            document.querySelector('.endereco').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
